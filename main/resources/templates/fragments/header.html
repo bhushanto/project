@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring MVC</title>
+</head>
+<body>
+<div class="container" th:fragment="header">
+    <header class="d-flex justify-content-center py-3">
+        <ul class="nav nav-pills">
+            <li class="nav-item"><a href="/" th:class="${activePage == 'welcome'} ? 'nav-link active' : 'nav-link'">Home</a></li>
+            <li class="nav-item"><a href="/event" th:class="${activePage == 'event'} ? 'nav-link active' : 'nav-link'">Event</a></li>
+            <li class="nav-item"><a href="/student" th:class="${activePage == 'student'} ? 'nav-link active' : 'nav-link'">Student</a></li>
+            <li class="nav-item"><a href="/report" th:class="${activePage == 'report'} ? 'nav-link active' : 'nav-link'">Report</a></li>
+<!--            <li class="nav-item"><a href="/resident" th:class="${activePage == 'resident'} ? 'nav-link active' : 'nav-link'">Resident</a></li>-->
+        </ul>
+    </header>
+    <hr class="dropdown-divider">
+</div>
+</body>
+</html>

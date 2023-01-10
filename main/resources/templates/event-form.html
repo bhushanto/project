@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div th:if="${event}">
+        <h4 class="mt-4">Update Event</h4>
+        <form class="mt-4" action="#" th:action="@{/update-event}" th:object="${eventForm}" method="post">
+            <div class="mb-3">
+                <input type="hidden" name="eventId" class="form-control" th:value="${event.eventId}">
+            </div>
+            <div class="mb-3 form-item required">
+                <label class="form-label">Name</label>
+                <input type="text" name="eventName" class="form-control" th:value="${event.eventName}" th:classappend="${not #lists.isEmpty(#fields.errors('eventName'))} ? 'is-invalid'">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('eventName')}" th:errors="*{eventName}"></div>
+            </div>
+            <div class="mb-3 form-item required">
+                <label class="form-label">Description</label>
+                <textarea rows="4" name="eventDescription" class="form-control"
+                          th:text="${event.eventDescription}"></textarea>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('eventDescription')}" th:errors="*{eventDescription}"></div>
+            </div>
+            <div class="mb-3 form-item required">
+                <label class="form-label">Destination</label>
+                <input type="text" name="eventDestination" class="form-control" th:value="${event.eventDestination}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('eventDestination')}" th:errors="*{eventDestination}"></div>
+            </div>
+            <div class="mb-3 form-item required">
+                <label class="form-label">Start Datetime</label>
+                <input type="datetime-local" name="eventStartDatetime" class="form-control"
+                       th:value="${#dates.format(event.eventStartDatetime, 'yyyy-MM-dd')} + 'T' + ${#dates.format(event.eventStartDatetime, 'HH:mm:ss')}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('eventStartDatetime')}" th:errors="*{eventStartDatetime}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">End Datetime</label>
+                <input type="datetime-local" name="eventEndDatetime" class="form-control"
+                       th:value="${#dates.format(event.eventEndDatetime, 'yyyy-MM-dd')} + 'T' + ${#dates.format(event.eventStartDatetime, 'HH:mm:ss')}">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <div th:unless="${event}">
+        <h4 class="mt-4">Create New Event</h4>
+        <form class="mt-4" action="#" th:action="@{/create-event}" th:object="${eventForm}" method="post">
+            <div class="mb-3 form-item required">
+                <label class="form-label">Name</label>
+                <input type="text" th:field="*{eventName}" class="form-control" th:classappend="${not #lists.isEmpty(#fields.errors('eventName'))} ? 'is-invalid'">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('eventName')}" th:errors="*{eventName}"></div>
+            </div>
+            <div class="mb-3 form-item required">
+                <label class="form-label">Description</label>
+                <textarea rows="4" id="eventDescription" th:field="*{eventDescription}" class="form-control" th:classappend="${not #lists.isEmpty(#fields.errors('eventDescription'))} ? 'is-invalid'"></textarea>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('eventDescription')}" th:errors="*{eventDescription}"></div>
+            </div>
+            <div class="mb-3 form-item required">
+                <label class="form-label">Destination</label>
+                <input type="text" id="eventDestination" th:field="*{eventDestination}" class="form-control" th:classappend="${not #lists.isEmpty(#fields.errors('eventDestination'))} ? 'is-invalid'">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('eventDestination')}" th:errors="*{eventDestination}"></div>
+            </div>
+            <div class="mb-3 form-item required">
+                <label class="form-label">Start Datetime</label>
+                <input type="datetime-local" id="eventStartDatetime" th:field="*{eventStartDatetime}" class="form-control" th:classappend="${not #lists.isEmpty(#fields.errors('eventStartDatetime'))} ? 'is-invalid'">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('eventStartDatetime')}" th:errors="*{eventStartDatetime}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">End Datetime</label>
+                <input type="datetime-local" id="eventEndDatetime" th:field="*{eventEndDatetime}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</body>
+</html>

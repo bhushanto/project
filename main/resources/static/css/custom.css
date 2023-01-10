@@ -1,0 +1,5 @@
+.form-item.required .form-label:after {
+    content:"*";
+    color:red;
+    margin-left: 0.5em;
+}
