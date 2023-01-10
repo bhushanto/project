@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="row">
+        <div class="col-sm-8">
+            <h4 class="mt-4" th:text="${event.eventName}"></h4>
+            <p class="mt-4" th:utext="${event.eventDescription}"></p>
+        </div>
+        <div class="col-sm-4">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Event Duration</h5>
+                    <p class="card-text"
+                       th:utext="${#dates.format(event.eventStartDatetime, 'dd-MM-yyyy hh:mm a')} + (${event.eventEndDatetime} ? (' -<br/ >' + ${#dates.format(event.eventEndDatetime, 'dd-MM-yyyy hh:mm a')}) : '')"></p>
+                    <br>
+                    <h5 class="card-title">Event Destination</h5>
+                    <p class="card-text" th:text="${event.eventDestination}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 table-responsive">
+            <span id="added"></span>
+            <table class="table">
+                <div class="alert alert-success" role="alert" th:if="${success}"
+                     th:text="${success}">
+                </div>
+                <div class="alert alert-danger" role="alert" th:if="${fail}"
+                     th:text="${fail}">
+                </div>
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Student Name</th>
+                    <th scope="col">Student Year</th>
+                    <th scope="col">Student Email</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="student : ${studentList}">
+                    <form th:if="${participatedStudentsIds.contains(student.studentId)}" id="remove-student" method="post" th:object="${participationForm}"
+                          th:action="@{/event/remove-student}">
+                        <td th:text="${student.studentId}"></td>
+                        <td th:text="${student.studentName}"></td>
+                        <td th:text="${student.studentYear}"></td>
+                        <td th:text="${student.studentEmail}"></td>
+                        <td>
+                            <button class="btn btn-danger" type="submit">Remove from Event</button>
+                        </td>
+                        <input type="hidden" name="eventId" th:value="${event.eventId}">
+                        <input type="hidden" name="studentId" th:value="${student.studentId}">
+                    </form>
+                    <form th:if="!${participatedStudentsIds.contains(student.studentId)}" id="add-student" method="post" th:object="${participationForm}"
+                          th:action="@{/event/add-student}">
+                        <td th:text="${student.studentId}"></td>
+                        <td th:text="${student.studentName}"></td>
+                        <td th:text="${student.studentYear}"></td>
+                        <td th:text="${student.studentEmail}"></td>
+                        <td th:if="!${participatedStudentsIds.contains(student.studentId)}">
+                            <button class="btn btn-info" type="submit">Add To Event</button>
+                        </td>
+                        <input type="hidden" name="eventId" th:value="${event.eventId}">
+                        <input type="hidden" name="studentId" th:value="${student.studentId}">
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</body>
+</html>

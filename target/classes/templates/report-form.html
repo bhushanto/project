@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div th:if="${report}">
+        <h4 class="mt-4">Update Report</h4>
+        <form class="mt-4" action="#" th:action="@{/update-report}" th:object="${reportForm}" method="post">
+            <div class="mb-3">
+                <input type="hidden" name="reportId" class="form-control" th:value="${report.reportId}">
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3 form-item required">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" aria-label=".form-select-lg example" name="reportCategory">
+                        <option value="Electric" th:selected="${'Electric'==report.reportCategory}">Electric</option>
+                        <option value="Water" th:selected="${'Water'==report.reportCategory}">Water</option>
+                        <option value="Room" th:selected="${'Room'==report.reportCategory}">Room</option>
+                        <option value="Service" th:selected="${'Service'==report.reportCategory}">Service</option>
+                        <option value="WiFi" th:selected="${'WiFi'==report.reportCategory}">WiFi</option>
+                    </select>
+                </div>
+                <div class="col-6 mb-3 form-item required">
+                    <label class="form-label">Title</label>
+                    <input type="text" name="reportTitle" class="form-control" th:value="${report.reportTitle}"
+                           th:classappend="${not #lists.isEmpty(#fields.errors('reportTitle'))} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('reportTitle')}"
+                         th:errors="*{reportTitle}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3 form-item required">
+                    <label class="form-label">Report Status</label>
+                    <select class="form-select" aria-label=".form-select-lg example" name="reportStatus">
+                        <option value="Pending" th:selected="${'Pending'==report.reportStatus}">Pending</option>
+                        <option value="In Progress" th:selected="${'In Progress'==report.reportStatus}">In Progress</option>
+                        <!--/*@thymesVar id="reportStatus" type=""*/-->
+                        <option value="Completed" th:selected="${'Completed'==report.reportStatus}">Completed</option>
+                    </select>
+                </div>
+                <div class="col-6 mb-3 form-item required">
+                    <label class="form-label">Submitted By Student</label>
+                    <select class="form-select" aria-label=".form-select-lg example" name="student">
+                        <option th:each="student : ${allStudents}"
+                                th:value="${student.studentId}"
+                                th:text="${student.studentName}"
+                                th:selected="${student.studentId==report.student.studentId}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3">
+                    <textarea class="form-control" name="reportDesc" rows="6" th:text="${report.reportDesc}"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <div th:unless="${report}">
+        <h4 class="mt-4">Create New Student</h4>
+        <form class="mt-4" action="#" th:action="@{/create-report}" th:object="${reportForm}" method="post">
+            <div class="mb-3">
+                <input type="hidden" name="reportId" class="form-control">
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3 form-item required">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" aria-label=".form-select-lg example" name="reportCategory">
+                        <option value="Electric">Electric</option>
+                        <option value="Water">Water</option>
+                        <option value="Room">Room</option>
+                        <option value="Service">Service</option>
+                        <option value="WiFi">WiFi</option>
+                    </select>
+                </div>
+                <div class="col-6 mb-3 form-item required">
+                    <label class="form-label">Title</label>
+                    <input type="text" name="reportTitle" class="form-control"
+                           th:classappend="${not #lists.isEmpty(#fields.errors('reportTitle'))} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('reportTitle')}"
+                         th:errors="*{reportTitle}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3 form-item required">
+                    <label class="form-label">Report Status</label>
+                    <select class="form-select" aria-label=".form-select-lg example" name="reportStatus">
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('reportStatus')}"
+                         th:errors="*{reportStatus}"></div>
+                </div>
+                <div class="col-6 mb-3 form-item required">
+                    <label class="form-label">Submitted By Student</label>
+                    <select class="form-select" aria-label=".form-select-lg example" name="student">
+                        <option th:each="student : ${allStudents}"
+                                th:value="${student.studentId}"
+                                th:text="${student.studentName}"></option>
+                    </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('student')}"
+                         th:errors="*{student}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 form-item required">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="reportDesc" rows="6"></textarea>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('reportDesc')}"
+                         th:errors="*{reportDesc}"></div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</body>
+</html>
